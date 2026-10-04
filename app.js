@@ -3,6 +3,10 @@
    目前登入為模擬畫面；學習進度先存在這台裝置的瀏覽器裡，串接 Firebase 後改存雲端。 */
 
 const ICON = "icon-192.png";
+/* 同一套檔案放在兩個網址：網址含 -test 的是「試用站」，其餘是正式站。
+   兩站在同一個網域，所以進度用不同的名稱分開保存，互不影響。 */
+const IS_TEST = /-test(\/|$)/.test(location.pathname) || ["localhost", "127.0.0.1"].includes(location.hostname);
+if (IS_TEST) document.documentElement.classList.add("test-site");
 const UNITS = window.UNITS.map(u => ({...u, bank: (window[u.key] || []).map(q => ({...q, unit: u.code}))}));
 const BANK = UNITS.flatMap(u => u.bank);
 const BY_ID = Object.fromEntries(BANK.map(q => [q.id, q]));
@@ -12,7 +16,7 @@ const CORE = Object.keys(CONCEPTS).filter(t => !SUPP.has(t));
 const unitOf = tag => ({R:"01", A:"02", E:"03", L:"04"})[tag[0]];
 
 /* ---------- 進度（存在這台裝置） ---------- */
-const KEY = "exam-review-v1";
+const KEY = IS_TEST ? "exam-review-test-v1" : "exam-review-v1";
 let P = load();
 function load(){
   try { const v = JSON.parse(localStorage.getItem(KEY)); if (v && v.c) return v; } catch (_) {}
@@ -53,7 +57,9 @@ function pick(mode, unit){
 let S = {screen: P.user ? "home" : "welcome", mode: null, list: [], i: 0, sel: [], typed: "", done: false, why: null, log: [], newly: [], sheet: null};
 const app = document.getElementById("app");
 const set = p => { Object.assign(S, p); render(); };
-const badge = () => `<span class="proto">測試版　登入與全班統計尚未開放</span>`;
+const badge = () => IS_TEST
+  ? `<span class="proto test">試用站　這裡的改動不會影響學生</span>`
+  : `<span class="proto">測試版　登入與全班統計尚未開放</span>`;
 const tagLabel = t => `${t}　${CONCEPTS[t] || ""}`;
 
 function startSession(mode, unit){

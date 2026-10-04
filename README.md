@@ -49,3 +49,16 @@ LaTeX 寫在 `String.raw` 字串裡，反斜線只要打一次，例如 ``String
 3. 把學號對照表匯入 Firestore（只有老師帳號能讀），**不要**放進 GitHub。
 4. 請學校資訊組在 Google Workspace 管理控制台，把這個 Firebase 專案的登入程式設為「信任」。未滿 18 歲的學生帳號預設會擋下未設定的第三方 App。
 5. 在 Firebase 的 **Authentication → Settings → Authorized domains** 加入 `你的帳號.github.io`。
+
+## 試用站與正式站
+
+同一套檔案放在兩個儲存庫：
+
+| 網站 | 儲存庫 | 用途 |
+| --- | --- | --- |
+| 正式站 | `exam-review` | 給學生使用 |
+| 試用站 | `exam-review-test` | 先試新題目或新功能，確認沒問題再更新正式站 |
+
+App 會依網址自動判斷：網址含 `-test` 的是試用站，畫面上方會有黃色的「試用站」標示，學習進度也和正式站分開保存。兩邊上傳的檔案完全一樣，不需要改任何設定。
+
+更新流程：先把新檔案上傳到 `exam-review-test` → 用手機確認 → 再把同一批檔案上傳到 `exam-review`。
